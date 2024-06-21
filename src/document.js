@@ -85,7 +85,7 @@ const hideLoadingIndicator = () => {
 showLoadingIndicator()
 
 $.widget('oc.guestNamePicker', {
-	_create: function() {
+	_create() {
 		hideLoadingIndicator()
 
 		const text = document.createElement('div')
@@ -141,7 +141,7 @@ const documentsMain = {
 	wopiClientFeatures: null,
 
 	// generates docKey for given fileId
-	_generateDocKey: function(wopiFileId) {
+	_generateDocKey(wopiFileId) {
 		let canonicalWebroot = Config.get('canonical_webroot')
 		let ocurl = getRootUrl() + '/index.php/apps/officeonline/wopi/files/' + wopiFileId
 		if (canonicalWebroot) {
@@ -164,7 +164,7 @@ const documentsMain = {
 						+ '<div id="revViewer"></div>'
 						+ '</div>',
 
-		showViewer: function(fileId, title) {
+		showViewer(fileId, title) {
 			// remove previous viewer, if open, and set a new one
 			if (documentsMain.isViewerMode) {
 				$('#revViewer').remove()
@@ -196,7 +196,7 @@ const documentsMain = {
 			})
 		},
 
-		loadRevViewerContainer: function() {
+		loadRevViewerContainer() {
 			if (!$('revViewerContainer').length) {
 				$(document.body).prepend(documentsMain.UI.viewContainer)
 				const closeButton = $('<button class="icon-close closeButton" title="' + t('officeonline', 'Close version preview') + '"/>')
@@ -204,7 +204,7 @@ const documentsMain = {
 			}
 		},
 
-		showEditor: function(title, fileId, action) {
+		showEditor(title, fileId, action) {
 			if (!documentsMain.renderComplete) {
 				setTimeout(function() { documentsMain.UI.showEditor(title, fileId, action) }, 10)
 				console.debug('Waiting for page to render…')
@@ -421,7 +421,7 @@ const documentsMain = {
 			$('#loleafletform').submit()
 		},
 
-		hideEditor: function() {
+		hideEditor() {
 			// Fade out editor
 			$('#mainContainer').fadeOut('fast', function() {
 				$('#mainContainer').remove()
@@ -431,7 +431,7 @@ const documentsMain = {
 		},
 	},
 
-	onStartup: function() {
+	onStartup() {
 		// Does anything indicate that we need to autostart a session?
 		const fileId = (getSearchParam('fileId') || '').replace(/^\W*/, '')
 
@@ -443,7 +443,7 @@ const documentsMain = {
 		documentsMain.ready = true
 	},
 
-	initSession: function() {
+	initSession() {
 		documentsMain.urlsrc = Config.get('urlsrc')
 		documentsMain.fullPath = Config.get('path')
 		documentsMain.token = Config.get('token')
@@ -459,11 +459,12 @@ const documentsMain = {
 		})
 	},
 
-	loadDocument: function(title, fileId) {
+	loadDocument(title, fileId) {
 		documentsMain.UI.showEditor(title, fileId, 'write')
+		console.debug('Loading document' + title + fileId)
 	},
 
-	onEditorShutdown: function(message) {
+	onEditorShutdown(message) {
 		OC.Notification.show(message)
 
 		$(window).off('beforeunload')
@@ -478,7 +479,7 @@ const documentsMain = {
 		$('footer,nav').show()
 	},
 
-	onClose: function() {
+	onClose() {
 		documentsMain.isEditorMode = false
 		$(window).off('beforeunload')
 		$(window).off('unload')
@@ -489,7 +490,7 @@ const documentsMain = {
 		PostMessages.sendPostMessage('parent', 'close', '*')
 	},
 
-	onCloseViewer: function() {
+	onCloseViewer() {
 		$('#revisionsContainer *').off()
 
 		$('#revPanelContainer').remove()
@@ -499,14 +500,14 @@ const documentsMain = {
 		$('#loleafletframe').focus()
 	},
 
-	postAsset: function(filename, url) {
+	postAsset(filename, url) {
 		PostMessages.sendWOPIPostMessage('loolframe', 'Action_InsertGraphic', {
-			filename: filename,
-			url: url,
+			filename,
+			url,
 		})
 	},
 
-	postGrabFocus: function() {
+	postGrabFocus() {
 		PostMessages.sendWOPIPostMessage('loolframe', 'Grab_Focus')
 	},
 }

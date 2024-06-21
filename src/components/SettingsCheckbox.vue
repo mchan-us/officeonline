@@ -73,7 +73,7 @@ export default {
 			this.inputVal = this.value
 		},
 	},
-	beforeCreate: function() {
+	beforeCreate() {
 		this.uuid = uuid.toString()
 		uuid += 1
 	},

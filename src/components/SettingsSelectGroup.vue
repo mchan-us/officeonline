@@ -85,7 +85,7 @@ export default {
 			this.inputValObjects = this.getValueObject()
 		},
 	},
-	created: function() {
+	created() {
 		this.uuid = uuid.toString()
 		uuid += 1
 		this.asyncFindGroup('').then((result) => {
@@ -98,7 +98,7 @@ export default {
 				(id) => {
 					if (typeof this.groups[id] === 'undefined') {
 						return {
-							id: id,
+							id,
 							displayname: id,
 						}
 					}
